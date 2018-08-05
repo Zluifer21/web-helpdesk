@@ -1,0 +1,115 @@
+.login {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    .l-content{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-content: stretch;
+        height: 100%;
+        .l-left{
+            flex: 0.7;
+            background-color: #fcf9c4;
+            background-image: url(https://api-helpdesk-thekrash22.c9users.io/api/public/resources/paisaje.jpg);
+            background-position: center;
+            background-size: cover;
+            .info-logo{
+                padding: 40px;
+                user-select: none;
+                cursor: default;
+                img {
+                    width: 500px;
+                }
+            }
+        }
+        .l-right{
+            background-color: white;
+            flex: 0.3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: -4px 0px 9px -4px rgba(0,0,0,0.25);
+            padding: 20px;
+            overflow: auto;
+            overflow: overlay;
+            .title-info {
+                margin-bottom: 50px;
+            }
+            form {
+                width: 320px;
+                margin: 20px;
+                button {
+                    width: 100%;
+                }
+            }
+
+            .mobile-info-logo {
+                margin-bottom: 10px;
+            }
+            .info-logo{
+                display: none;
+                text-align: center;
+                img {
+                    width: 300px;
+                }
+            }
+
+        }
+        //RESPONSIVE
+
+        @media(max-width: 1000px){
+            .l-right {
+                flex: 0.5;
+                align-items: flex-start;
+            }
+        }
+        @media(max-width: 830px){
+            .l-left {
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                .info-logo{
+                    display: none;
+                }
+
+            }
+            .l-right {
+                margin: 0 auto;
+                z-index: 22;
+                flex: 0.7;
+                .info-logo{
+                    display: block;
+                }
+                .title-info {
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+            }
+        }
+
+        @media(max-width: 580px){
+            .l-left {
+                display: none;
+            }
+            .l-right {
+                flex: 1;
+                form {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+.nopadding {
+    padding: 0 !important;
+}
+.nomargin{
+    margin: 0 !important;
+}

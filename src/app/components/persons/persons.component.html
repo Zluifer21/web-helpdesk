@@ -1,0 +1,166 @@
+<app-navbar></app-navbar>
+<div class="container persons" style="width: 90%; !important">
+  <!-- -PERSONS -->
+  <div class="title">Personas en el sistema</div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-content">
+          <div class="tools">
+            <div class="search-table">
+              <input type="search" required placeholder="Buscar">
+              <label ><i class="material-icons">search</i></label>
+              <i class="material-icons close hand" ng-if="search">close</i>
+            </div>
+          </div>
+          <table class="highlight responsive-table">
+            <thead>
+              <tr>
+                <th data-field="">Tipo</th>
+                <th data-field="">N. documento</th>
+                <th data-field="">Nombre</th>
+                <th data-field="">Email</th>
+                <th data-field="" class="center-align">Telefono</th>
+                <th data-field="" class="center-align">Dirección</th>
+                <th data-field="" class="center-align">C.C Representante Legal</th>
+                <th data-field="" class="center-align">Representante Legal</th>
+                <th data-field="" class="center-align" ng-show="!$ctrl.editingP">F. creacion</th>
+                <th data-field="" class="center-align" ng-if="$ctrl.currentUser.role!='Auditor'">Acciones</th>
+              </tr>
+            </thead>
+            <tbody class="form-people">
+              <tr *ngFor="let p of persons.data">
+                <!-- -DNI TYPE -->
+                <td>
+                  <span *ngIf="editingP.id!=p.id">{{p.dinType_id}}</span>
+
+                  <span *ngIf="editingP.id==p.id">
+                    <select  [(ngModel)]="editingP.dinType_id"
+                      materialize="material_select" >
+                      <option value="C.C">Cedula</option>
+                      <option value="NIT">Nit</option>
+                    </select>
+                  </span>
+                </td>
+                <!-- -DNI -->
+                <td>
+                  <strong *ngIf="editingP.id!=p.id">{{p.dni}}</strong>
+                  <span *ngIf="editingP.id==p.id">
+                      <input type="text" [(ngModel)]="editingP.dni"
+                      required='required'>
+
+                </span>
+                </td>
+                <!--NAME-->
+                <td>
+                  <span *ngIf="editingP.id!=p.id">{{p.name}}</span>
+                  <span *ngIf="editingP.id==p.id">
+                      <input type="text" [(ngModel)]="editingP.name"
+                      required='required'>
+
+                </span>
+                </td>
+                <!--EMAIL-->
+                <td>
+                  <span *ngIf="editingP.id!=p.id" >{{p.email}}</span>
+                  <span *ngIf="editingP.id==p.id">
+                      <input type="text" [(ngModel)]="editingP.email"
+                      required='required'>
+
+                </span>
+                </td>
+                <!--PHONE-->
+                <td class="center-align">
+                  <span *ngIf="editingP.id!=p.id">{{p.phone || '-'}}</span>
+                  <span *ngIf="editingP.id==p.id">
+                      <input type="text" [(ngModel)]="editingP.phone"
+                      required='required'>
+
+                </span>
+                </td>
+                <!--ADDRESS-->
+                <td class="center-align">
+                  <span *ngIf="editingP.id!=p.id">{{p.address || '-'}}</span>
+                  <span *ngIf="editingP.id==p.id">
+                      <input type="text" [(ngModel)]="editingP.address"
+                      required='required'>
+
+                </span>
+
+                </td>
+                <!-- AGENT DNI -->
+                <td>
+                  <strong *ngIf="editingP.id!=p.id">{{p.agentDni}}</strong>
+                  <span *ngIf="editingP.id==p.id">
+                      <input type="text" [(ngModel)]="editingP.agentDni">
+                </span>
+                </td>
+                <!-- AGENT NAME-->
+                <td>
+                  <span *ngIf="editingP.id!=p.id">{{p.agentName}}</span>
+                  <span *ngIf="editingP.id==p.id">
+                      <input type="text" [(ngModel)]="editingP.agentName">
+                </span>
+               </td>
+                <!--CREATED_AT-->
+                <td class="center-align"  *ngIf="editingP.id==0">{{p.created_at | date:'d MMMM, yyyy'}}</td>
+                <!--ACTIONS-->
+                <td class="center-align" >
+                  <a class="action" *ngIf="editingP.id==0" (click)="beginEdit(p)">
+                    <i class="material-icons">edit</i>
+                  </a>
+                  <a class="action"
+                    title="Guardar cambios"
+                    *ngIf="editingP.id!=0 && editingP.id==p.id"
+                    (click)="saveEdit()">
+                    <i class="material-icons green-text">done</i>
+                  </a>
+                  <a class="action"
+                    title="Cancelar"
+                    *ngIf="editingP.id!=0 && editingP.id==p.id"
+                    (click)="cancel()">
+                    <i class="material-icons grey-text">cancel</i>
+                  </a>
+                </td>
+              </tr>
+
+              <!--LOADING-->
+              <tr  *ngIf="loading">
+                <td colspan="8" class="center" style="padding: 20px">
+                  <div class="preloader-wrapper small active">
+                    <div class="spinner-layer spinner-blue-only">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                        </div><div class="gap-patch">
+                        <div class="circle"></div>
+                        </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <!--END LOADING-->
+
+              <!--EMPTY-->
+              <tr *ngIf="!persons.data">
+                <td colspan="8" class="center">
+                  <div class="empty">
+                    No hay tickets que mostrar
+                  </div>
+                </td>
+              </tr>
+              <!--END EMPTY-->
+
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>

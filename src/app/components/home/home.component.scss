@@ -1,0 +1,49 @@
+
+.home {
+  div.divider {
+    margin-bottom: 20px;
+  }
+  .home-dash, .home-dash2 {
+    .h-flex-center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 172px;
+    }
+    .card-action {
+      padding: 10px 20px;
+      a {
+        color: #ffab40 !important;
+      }
+    }
+
+    .stats {
+      .card {
+        text-align: center;
+        width: 170px;
+        &.circle-status{
+          height: 150px;
+          width: 150px;
+          border-radius: 50%;
+          .circle-status__count{
+            height: auto;
+            width: 70px;
+            padding: 0;
+            position: absolute;
+            top: 3.3em;
+            left: 2.5em;
+            span{
+              line-height: 24px;
+            }
+          }
+        }
+        .card-content {
+          height: 115px;
+        }
+      }
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+  }
+}

@@ -1,0 +1,164 @@
+
+
+<nav class="nav-d">
+  <div class="nav-wrapper">
+
+    <!--MOBILE MENU-->
+    <a class="button-collapse" data-activates="side-out" href="#">
+      <i class= "material-icons">menu</i>
+    </a>
+    <ul class="side-nav" id="side-out">
+      <li>
+        <div class="userView">
+          <div class="background">
+            <img src="https://api-helpdesk-thekrash22.c9users.io/api/public/resources/fondo_movil.jpg" width="100%">
+          </div>
+          <a href="">
+            <img class="circle" >
+          </a>
+          <a href="javascript:void(0);">
+            <span class= "white-text name"></span>
+          </a>
+          <a href="javascript:void(0);">
+            <span class= "white-text email"></span>
+          </a>
+        </div>
+      </li>
+<!--
+      <li ng-repeat="m in $ctrl.menus" show-if-logged="{{ m.permissions }}"
+        ng-class="{'active': m.isActive}">
+
+        <a class="waves-effect" ng-click="$ctrl.updateMenu(m)">
+          <i class="material-icons left">{{ m.iconM }}</i>
+          {{ m.name }}
+        </a>
+      </li>
+      -->
+
+      <li class="divider"></li>
+      <li>
+        <a ng-click="Logout()">
+          <i class="material-icons left">exit_to_app</i>
+          Salir
+        </a>
+      </li>
+    </ul><!-- -END MOBILE MENU -->
+
+    <!-- -LEFT MENU-->
+    <ul class="left hide-on-med-and-down">
+     <li
+        *ngFor="let m of menus"
+        [ngClass]="{active: m.isActive}">
+       <a class="waves-effect" (click)="updateMenu(m)" >
+         <i class="material-icons left" ng-if= "m.icon">{{ m.icon }}</i>
+         {{ m.name }}
+       </a>
+     </li>
+   </ul>
+
+
+
+    <!-- -END LEFT MENU -->
+    <!-- -LOGO -->
+    <!--<a href="#" class="brand-logo center">DADSA</a>-->
+    <!-- -RIGHT MENU -->
+    <ul class="right hide-on-med-and-down">
+      <li>
+        <a class="dropdown-button" data-activates="dropdown-profile" href="javascript:void(0);">
+          <img class="avatar circle" src="https://api-helpdesk-thekrash22.c9users.io/api/public/resources/no-user-image.gif" alt="">
+        </a> <!-- DROPDAWN PROFILE -->
+        <ul class="dropdown-content" id="dropdown-profile">
+          <li>
+            <a  [routerLink]="['/profile']">
+              <i class="material-icons left">account_circle</i>
+              Perfil
+            </a>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <a  (click)="Logout()"><i class="material-icons left">exit_to_app</i>Salir</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <ul class="right">
+      <li>
+        <div class="search-box">
+
+          <input type="text" >
+          <i class="material-icons" >search</i>
+          <section class="results z-depth-2">
+            <div class="indications">
+              <strong>Busca por: # Radicado, Estado, Personas etc.</strong>
+            </div>
+            <section class="list-r tinyScroll" >
+              <article
+              >
+                <div class="assignedTo">
+                  <img class="avatar"  alt="">
+
+                  <div class="otherinfo">
+                    <span class="number">
+                      <strong>Radicado </strong>
+                      <small></small>
+                    </span>
+                    <span class="info">
+                      <strong>Persona:&nbsp</strong>
+
+                    </span>
+                    <span class="info">
+                      <strong>Fecha:&nbsp</strong>
+
+                    </span>
+                  </div>
+                </div>
+                <div class="role">
+                  <small></small>
+                </div>
+              </article>
+            </section>
+            <!--LOADING-->
+            <div class="cont-loading" >
+              <div class="preloader-wrapper small active">
+                <div class="spinner-layer spinner-blue-only">
+                  <div class="circle-clipper left">
+                    <div class="circle"></div>
+                    </div><div class="gap-patch">
+                    <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--END LOADING-->
+
+            <!--EMPTY-->
+            <div class="empty" >
+              No hay resultados
+            </div>
+            <!--END EMPTY-->
+          </section>
+        </div>
+      </li>
+      <li>
+<!--END EMPTY
+        <notifications >
+          <a class="notifications-box" style="margin-left: 5px">
+            <i class="material-icons">notifications</i>
+            <span class="badge_notification z-depth-1" ng-if="$ctrl.activeUser.notifications > 0">
+              1055
+            </span>
+          </a>
+        </notifications>-->
+        <a class="notifications-box ng-scope" style="margin-left: 5px">
+                    <i class="material-icons">notifications</i>
+                    <!-- ngIf: $ctrl.activeUser.notifications > 0 --><span class="badge_notification z-depth-1 ng-binding ng-scope" ng-if="$ctrl.activeUser.notifications > 0">
+                      11964
+                    </span><!-- end ngIf: $ctrl.activeUser.notifications > 0 -->
+                  </a>
+
+      </li><!-- Dropdown Trigger PROFILE -->
+    </ul><!-- -END RIGHT MENU -->
+  </div>
+</nav>

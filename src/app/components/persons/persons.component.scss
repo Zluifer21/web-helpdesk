@@ -1,0 +1,39 @@
+
+.persons {
+  width: 90% !important;
+    .btn-floating{
+        position: fixed;
+    bottom: 45px;
+    right: 65px;
+  }
+  a.action {
+    cursor: pointer;
+    &.disabled{
+      cursor: default;
+      filter: grayscale(100%);
+      pointer-events: none;
+    }
+  }
+  tbody.form-people {
+    input {
+      margin-bottom: 0;
+    }
+  }
+ .search-table input {
+    padding-left: 30px;
+    box-sizing: border-box;
+  }
+  .search-table label {
+    top: 12px;
+    left: 0;
+    position: absolute;
+  }
+  .search-table {
+    position: relative;
+  }
+  .search-table i.close {
+    position: absolute;
+    top: 12px;
+    right: 0;
+  }
+}

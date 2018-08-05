@@ -1,0 +1,172 @@
+
+
+.chip_n {
+  height: 25px;
+  font-size: 13px;
+  line-height: 25px;
+  padding: 0 5px;
+  border-radius: 10px;
+  display: inline-block;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+  background-color: #e4e4e4;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  max-width: 12em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  .close {
+    position: relative;
+    cursor: pointer;
+    float: right;
+    font-size: 16px;
+    line-height: 26px;
+    padding-left: 8px;
+  }
+}
+
+div.tools {
+  .search-table {
+    position: relative;
+    input {
+      padding-left: 30px;
+      box-sizing: border-box;
+    }
+    label {
+      top: 12px;
+      left: 0;
+      position: absolute;
+    }
+    i.close {
+      position: absolute;
+      top: 12px;
+      right: 0px;
+    }
+  }
+}
+.tickets {
+    .filters {
+    //display: flex;
+    //flex-wrap: wrap;
+    //justify-content: space-around;
+    //flex: 1;
+    width: 100%;
+    position: relative;
+    text-align: center;
+    padding: 15px;
+    padding-bottom: 0;
+    margin: 0 20px;
+    .filter {
+      //margin: 0 10px;
+    }
+
+
+    p.title {
+      position: absolute;
+      top: -15px;
+      background-color: white;
+      left: 10px;
+      padding: 5px;
+      font-size: 0.9rem;
+      //color: $thirdColor;
+    }
+
+  }
+
+  @media (max-width: 601px){
+    .filters{
+      margin: 0px;
+      display: block;
+    }
+  }
+  @media (min-width: 993px) {
+      &.container {
+          width: 90%;
+      }
+  }
+  @media (min-width: 1100px) {
+      &.container {
+          width: 80%;
+      }
+  }
+}
+.subnav {
+ height:0;
+ -webkit-transition:height .4s;
+ transition:height .4s;
+ background-color:#3e9d42
+
+}
+.subnav.active {
+ height:48px
+}
+.subnav ul.tabs-subnav {
+ margin:0;
+ display:-webkit-box;
+ display:-ms-flexbox;
+ display:flex;
+ -webkit-box-pack:center;
+ -ms-flex-pack:center;
+ justify-content:center
+}
+.subnav ul.tabs-subnav li {
+ text-align:center;
+ line-height:48px;
+ height:48px;
+ padding:0;
+ text-transform:uppercase;
+ width:150px
+}
+.subnav ul.tabs-subnav li.active {
+ border-bottom:2px solid #fff
+}
+.subnav ul.tabs-subnav li.active a {
+ color:#fff
+}
+.subnav ul.tabs-subnav li a {
+ color:hsla(0,0%,100%,.56);
+ width:100%;
+ height:100%;
+ font-size:14px;
+ font-weight:500;
+ text-overflow:ellipsis;
+ overflow:hidden;
+ -webkit-transition:color .28s ease;
+ transition:color .28s ease
+}
+.subnav div.subt {
+ text-align:center;
+ font-size:21px;
+ font-weight:400;
+ color:#fff;
+ height:100%
+}
+.side-nav .userView .circle {
+ -o-object-fit:cover;
+ object-fit:cover
+}
+.applicant-name{
+  max-width:13em;
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.btn-floating {
+  position: absolute;
+  right: 0;
+  bottom: -40px;
+  background-color: #F44336;
+}
+.btn-floating.btn-new {
+    position: fixed;
+    bottom: 5%;
+    right: 3%;
+    background-color: #8bc34a;
+}
+.report-close{
+  padding: 0 10px;
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}

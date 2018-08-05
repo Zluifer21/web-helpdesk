@@ -1,0 +1,83 @@
+<div class="login">
+  <div class="l-content">
+
+    <div class="l-left">
+      <div class="info-logo">
+        <img src="https://helpdesk-api.dadsa.co/media/files/1abbb9f6-58a2-4d05-a093-700113b4d0ab_qp_logo%20v2.png" alt="">
+        <h4>DADSA - Helpdesk</h4>
+        <p>Santa Marta</p>
+      </div>
+    </div>
+
+    <div class="l-right">
+      <form novalidate  #loginForm="ngForm" (ngSubmit)="logIn()" >
+        <div class="row mobile-info-logo">
+          <div class="info-logo">
+            <img src="https://helpdesk-api.dadsa.co/media/files/1abbb9f6-58a2-4d05-a093-700113b4d0ab_qp_logo%20v2.png" alt="" class="logo-mobile">
+          </div>
+        </div>
+        <div class="row title-info" style="">
+          <div class="col s12 center-align" >
+            <!--
+<h5 style="color: red">Has sido desconectado por inactividad</h5>-->
+          </div>
+          <div class="col s12">
+            <h5>Iniciar Sesión</h5>
+            <span class="subtitle">Ingrese sus credenciales de acceso</span>
+          </div>
+        </div>
+        <div class="row nomargin" >
+          <div class="col s12">
+            <div class="input-field">
+              <input
+              type="text"
+              name="username"
+              #username="ngModel"
+              [(ngModel)]="user.username"
+              class="validate"
+              required>
+              <label for="username" class="active">Nombre de usuario</label>
+              <!--<input id="email" type="email" class="validate"-->
+              <!--name="email"-->
+              <!--required=""-->
+              <!--ng-model="$ctrl.user.email">-->
+              <!--<label for="email" data-error="Error" data-success="Bien">Email</label>-->
+            </div>
+          </div>
+        </div>
+        <div class="row nomargin">
+          <div class="col s12">
+            <div class="input-field">
+              <input
+                type="password"
+                name="password"
+                #password="ngModel"
+                [(ngModel)]="user.password"
+                class="validate"
+                required>
+              <label for="password" class="active">Contraseña</label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12">
+            <p class="red-text" *ngIf="mensaje">{{mensaje}}</p>
+
+            <button class="btn waves-effect waves-light"
+              type="submit"
+              [disabled]="!loginForm.form.valid">
+              Ingresar
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s12 center">
+            <a  style="color: #039be5; cursor: pointer;">¿Olvidó su contraseña?</a>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>

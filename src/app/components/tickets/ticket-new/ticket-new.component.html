@@ -1,0 +1,210 @@
+<app-navbar></app-navbar>
+<div class="subnav active  z-depth-1">
+  <div class="container" style="height: 100%;">
+    <div class="subt flex-center">
+      Nuevo Ticket &nbsp
+
+    </div>
+  </div>
+</div>
+
+<div class="container ticket_new">
+
+  <div class="row">
+    <div class="col s12 m5">
+      <div class="title">Solicitante</div>
+      <div class="card">
+        <div class="card-content">
+          <!--<h6 class="subtitle">Solicitante</h6>-->
+
+          <div class="component">
+
+            <div class="row">
+              <div class="input-field col s12 l4">
+                <select materialize="material_select" [(ngModel)]="ticket_new.dinType_id">
+                  <option value="1">Cedula</option>
+                  <option value="2">Nit</option>
+                </select>
+              </div>
+              <div class="input-field col s12 l8 ">
+                <p-autoComplete [(ngModel)]="person"  [suggestions]="filteredPersondni" (completeMethod)="filterdni($event)" [size]="30"
+                    [minLength]="1" placeholder="Documento" field="dni" (onSelect)="person_select()">
+                    <ng-template let-person pTemplate="item">
+                        <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5">
+                          <li>
+                            <span>
+                              <strong >{{person.dni}} -</strong>
+                              <span class="capitalize ">{{person.name}}</span>
+                            </span>
+                          </li>
+              </div>
+                    </ng-template>
+                </p-autoComplete>
+                  <button class="btn-f btn-right red-text "
+                    *ngIf="ticket_new.dni"
+                    title="Limpiar Campos"
+                    (click)="clean()">
+                   <i class="material-icons">clear</i>
+                  </button>
+
+
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="input-field col s12  validate_n">
+                <i class="material-icons prefix">person</i>
+                <input type="text" placeholder="Nombre" [(ngModel)]="ticket_new.name" [disabled]="autoComplete">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s12  validate_n">
+                <i class="material-icons prefix">location_on</i>
+                <input type="text" placeholder="Dirección" [(ngModel)]="ticket_new.address" [disabled]="autoComplete">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s12 validate_n">
+                <i class="material-icons prefix">phone</i>
+                <input type="text" placeholder="Telefono" [disabled]="autoComplete"  [(ngModel)]="ticket_new.phone">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field col s12 validate_n" >
+                <i class="material-icons prefix">email</i>
+                <input type="email" required="" placeholder="Correo electrónico" [(ngModel)]="ticket_new.email" [disabled]="autoComplete">
+              </div>
+            </div>
+
+            <div class="row" *ngIf="ticket_new.dinType_id==2">
+              <div class="input-field col s12">
+                <i class="material-icons prefix">gavel</i>
+                <input type="text" placeholder="Documento representante legal"  [(ngModel)]="ticket_new.agentDni" [disabled]="autoComplete">
+              </div>
+            </div>
+
+            <div class="row" *ngIf="ticket_new.dinType_id==2">
+              <div class="input-field col s12">
+                <i class="material-icons prefix">gavel</i>
+                <input type="text" placeholder="Nombre representante legal" [(ngModel)]="ticket_new.agentName" [disabled]="autoComplete">
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div> <!-- end card -->
+    </div>
+
+    <div class="col s12 m7">
+      <div class="title">Ticket</div>
+      <div class="card">
+        <div class="card-content">
+          <!--<h6 class="subtitle">Ticket</h6>-->
+          <div class="component">
+            <div class="row">
+              <div class="input-field col s12 m2">
+                <label>Asignar a:</label>
+              </div>
+              <div class="input-field col s12 m10 validate_n">
+                <p-autoComplete [(ngModel)]="userform"  [suggestions]="filteredUser" (completeMethod)="filters($event)" [size]="30"
+                    [minLength]="1" placeholder="Todos" field="name" (onSelect)="assigned()" >
+                    <ng-template let-userform pTemplate="item">
+                        <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5">
+                            <img src="https://api-helpdesk-thekrash22.c9users.io/api/public/resources/no-user-image.gif" style="float:left;width: 26px;display:inline-block;margin: 5px 0 2px 5px;position: absolute; border-radius:50%"/>
+                            <div style="float:left;font-size:18px;margin:10px 10px 0 36px">{{userform.name}}</div>
+                        </div>
+                    </ng-template>
+                </p-autoComplete>
+                  <button class="btn-flat btn-right red-text report-close"
+                  *ngIf="userselected"
+                  title="Limpiar Campos"
+                  (click)="clean()"              >
+                 <i class="material-icons">clear</i>
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12 m2">
+                <label>Asunto:</label>
+              </div>
+              <div class="input-field col s12 m10 ">
+                <p-autoComplete [(ngModel)]="subjects_ids" [suggestions]="filteredsubjects" (completeMethod)="filterSubject($event)"
+                      [minLength]="1" placeholder="Asuntos" field="name" [multiple]="true" (onSelect)="subject_id()">
+                      <ng-template let-value pTemplate="selectedItem">
+                          <span style="font-size:15px">{{value.name}}</span>
+
+                      </ng-template>
+                  </p-autoComplete>
+              </div>
+
+            </div>
+            <div class="row">
+                <label> Archivos Adjuntos </label>
+              <div class="input-field col s12">
+                <div class="row">
+
+                  <p-fileUpload name="files" (onSelect)="onUpload($event)"
+                          multiple="multiple"  maxFileSize="10000000"   [showUploadButton]="false">
+                      <ng-template pTemplate="content">
+
+                      </ng-template>
+                  </p-fileUpload>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <textarea class="materialize-textarea" [(ngModel)]="ticket_new.description"></textarea>
+                <label for="textarea1">Descripcion</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12 m2">
+                  <label>Folios:</label>
+                </div>
+              <div class="input-field col s12 m10  validate_n" >
+                <input type="number" placeholder="Número de folios" [(ngModel)]="ticket_new.folios">
+              </div>
+            </div>
+            <br>
+            <div class="row">
+              <div class=" col s3">
+                <label style="font-size: 1rem; color: #404040;">Prioridad:</label>
+              </div>
+              <div class=" col s3">
+
+                    <input class="with-gap" name="priority" type="radio" id="1" [value]="1"  [(ngModel)]="ticket_new.priority_id" />
+                    <label for="1">Baja</label>
+
+              </div>
+              <div class=" col s3">
+                   <input class="with-gap" name="priority" type="radio" id="2" [value]="2"   [(ngModel)]="ticket_new.priority_id" />
+                    <label for="2">Normal</label>
+              </div>
+              <div class=" col s3">
+                   <input class="with-gap" name="priority" type="radio" id="3" [value]="3"   [(ngModel)]="ticket_new.priority_id"/>
+                    <label for="3">Alta</label>
+              </div>
+            </div><br>
+            <div class="row">
+              <div class="col-md-12">
+                <!-- -SAVE BUTTOM -->
+                <div class="right">
+                  <a class="waves-effect waves-light btn btn-save" (click)="save()">
+                    <!--<i class="material-icons left">save</i>-->
+                    Guardar
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div> <!-- end card -->
+    </div>
+  </div>
+</div>

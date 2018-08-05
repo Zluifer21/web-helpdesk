@@ -1,0 +1,499 @@
+<app-navbar></app-navbar>
+<div class="subnav active z-depth-1" style="position: relative;" *ngIf='ticket'>
+  <div class="container" style="height: 100%;">
+    <div class="subt flex-center" style="cursor: default;">
+      Ticket #{{ ticket.settled }}
+      <div class="time-indicator hide-on-small-only"
+        title="{{ticket.created_at | date:'d MMMM, yyyy  hh:mm a' }}">
+        <i class="material-icons">access_time</i>
+        <span class="elapsedtimedate" >{{ ticket.created_at }}</span>
+      </div>
+    </div>
+  </div>
+  <a href="{{ ticket.id }}"></a>
+</div>
+
+<section class="container ticket_detail">
+  <div class="title">Detalle del ticket ---> </div>
+
+  <div class="card" *ngIf='ticket' >
+
+    <div class="card-content">
+      <article class="row" style="padding-top: 5px;">
+        <div class="col s12 m6">
+          <div class="component">
+
+            <!-- - ESTADO -->
+            <article class="row">
+              <div class="input-field col s6 m4">
+                <label >Estado:</label>
+              </div>
+              <div class="input-field col s6 m8" style="max-height: 40px">
+                <div class="text-to-edit">
+                  <span class="blue-text title">{{ ticket.status.name }}</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- - ASIGNADO -->
+            <article class="row">
+              <div class="input-field col s6 m4">
+                <label>Asignado a:</label>
+              </div>
+              <div class="input-field col s6 m8"  style="max-height: 40px">
+                <div class="text-to-edit">
+                  <span class="link blue-text title capitalize" (click)="openModal_assigned()"
+                    >
+                    {{ ticket.tickets_assigned_user_to[0].name | lowercase  }}
+                  </span>
+                </div>
+              </div>
+            </article>
+
+
+            <!-- - SOLICITANTE -->
+            <article class="row">
+              <div class="input-field col s6 m4">
+                <label>Solicitante:</label>
+              </div>
+              <div class="input-field col s6 m8">
+                <div class="text-to-edit">
+                  <span class="link blue-text title capitalize"
+                  (click)="openModal_user()">
+                    {{ ticket.person.name | lowercase }}
+                  </span>
+                </div>
+              </div>
+            </article>
+
+            <!--RELACIONADO -->
+            <article class="row" *ngIf="ticket.linkedTicketId">
+              <div class="input-field col s6 m4">
+                <label>Relacionado:</label>
+              </div>
+              <div class="input-field col s6 m8">
+                <div class="text-to-edit">
+                  <span class="link blue-text title capitalize" ui-sref="ticketsdetail({id:  ticket.linkedTicketId })">
+                    Ir
+                  </span>
+                </div>
+              </div>
+            </article>
+
+            <!--FECHA VENCIMIENTO
+            <article class="row" ng-show="dueActive">
+              <div class="input-field col s6 m4">
+                <label>Vencimiento:</label>
+                </div>
+                <div class="input-field col s6 m8">
+                  <div class="text-to-edit"  style="margin-top: 0;">
+                    <duedate ticket="ticket" active="dueActive"></duedate>
+                  </div>
+                </div>
+              </article>
+                -->
+
+            <!-- -ASUNTOS -->
+            <article class="row">
+              <div class="input-field col s4">
+                <label>Asuntos:</label>
+              </div>
+              <div class="input-filed col s12 m8">
+                <div class="text-to-edit subjects-r">
+                  <div class="element-edit" *ngIf="subjectIsEdit"style="max-height: 45px;">
+                    <input type="text" required="" placeholder="Agregar asunto..."
+                    ng-model="subjectName"
+                    select-from-api
+                    fetch="fetchSubjects(query)"
+                    preload="true"
+                    click="addSubject(ele)">
+                    <button class="btn-flat green-text done"
+                      ng-click="subjectDoneChanges()">
+                      <i class="material-icons">done</i>
+                    </button>
+                  </div>
+                  <ul class="subject-list">
+                    <li *ngFor="let subject of ticket.subjects">
+                      <div class="chip_n" title="{{ subject.name }}">
+                        <i class="close material-icons red-text"
+                          ng-click="removeSubject(subject)"
+                          *ngIf="subjectIsEdit">close</i>
+                        {{ subject.name  }}
+                      </div>
+                    </li>
+                    <button class="btn-flat blue-text"
+                      *ngIf="!subjectIsEdit && ticket.status!=5"
+                      show-if-logged="Director, Recepcionista, Superuser"
+
+                      ng-click="subjectIsEdit=true">
+                      <i class="material-icons">edit</i>
+                    </button>
+                  </ul>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </div>
+        <div class="col s12 m6">
+          <div class="component">
+
+            <!-- -ARCHIVOS -->
+            <article class="row">
+              <div class="input-field col s4">
+                <label>Archivos
+                  <small *ngIf="ticket.files.length>0">({{ ticket.files.length}})</small>:
+                </label>
+              </div>
+              <div class="input-field col s8">
+                <div class="text-to-edit file-list-detail tinyScroll">
+                <a style="cursor: pointer;" class="truncate" *ngFor="let file of ticket.files" (click)="openModal_viewer(file)">
+                  <i class="material-icons">attach_file</i>
+                  <span>{{file.name}}</span>
+                </a>
+
+                  <div class="empty" *ngIf="ticket.files.length==0" style="margin-top: 0">
+                    No hay archivos agregados
+                  </div>
+                </div>
+              </div>
+            </article>
+            <!-- -END ARCHIVOS -->
+
+            <!-- - DESCRIPTION -->
+            <article class="row" style="margin-bottom: 20px;">
+              <div class="input-field col s4">
+                <label>Descripción:</label>
+              </div>
+              <div class="input-field col s8">
+                <div class="text-to-edit description tinyScroll"
+                    *ngIf="!decriptionEdit">
+                    <!-- ng-show="!decriptionEdit && ticket.status != 'Cerrado' -->
+                  <p class="grey-text" *ngIf="ticket.description">
+                    {{ ticket.description }}
+                  </p>
+                  <div class="empty" *ngIf="!ticket.description"
+                    style="margin-top: 5px; margin-left: 5px;">
+                    Vacio
+                  </div>
+
+                  <button class="btn-flat blue-text"
+                    ng-click="decriptionEdit=true"
+                    ng-disabled="currentUser.role=='Auditor'"
+                    show-if-logged="Recepcionista, Superuser, Director">
+                    <i class="material-icons">edit</i>
+                  </button>
+                </div>
+                <div class="text-edit description" *ngIf="decriptionEdit">
+                  <textarea class="materialize-textarea" ng-model="ticket.description"></textarea>
+                  <button class="btn-flat green-text done"
+                    ng-click="updateDescription()">
+                    <i class="material-icons">done</i>
+                  </button>
+                </div>
+
+              </div>
+            </article>
+
+            <article class="row" style="margin-bottom: 20px;">
+              <div class="input-field col s4">
+                <label>Folios:</label>
+              </div>
+              <div class="input-field col s8">
+                <div class="text-to-edit description tinyScroll"
+                    *ngIf="!foliosEdit">
+                    <!-- ng-show="!decriptionEdit && ticket.status != 'Cerrado' -->
+                  <p class="grey-text" *ngIf="ticket.description">
+                    {{ ticket.folios }}
+                  </p>
+                  <div class="empty" *ngIf="!ticket.description"
+                    style="margin-top: 5px; margin-left: 5px;">
+                    Vacio
+                  </div>
+
+                  <button class="btn-flat blue-text"
+                    ng-click="foliosEdit=true"
+                    ng-disabled="currentUser.role=='Auditor'"
+                    show-if-logged="Recepcionista, Superuser, Director">
+                    <i class="material-icons">edit</i>
+                  </button>
+                </div>
+                <div class="text-edit description" *ngIf="foliosEdit">
+                  <textarea class="materialize-textarea" ng-model="ticket.folios"></textarea>
+                  <button class="btn-flat green-text done"
+                    ng-click="updateFolios()">
+                    <i class="material-icons">done</i>
+                  </button>
+                </div>
+
+              </div>
+            </article>
+
+            <article class="row" style="margin-bottom: 20px;">
+              <div class=" col s4">
+                <label style="font-size: 1rem; color: #404040;">Prioridad:</label>
+                <button class="btn-flat blue-text"
+                    ng-click="priorityEdit=true"
+                    ng-disabled="currentUser.role=='Auditor'"
+                    show-if-logged="Recepcionista, Superuser, Director"
+                    *ngIf="!priorityEdit">
+                    <i class="material-icons">edit</i>
+                  </button>
+
+                  <button class="btn-flat green-text"
+                    *ngIf="priorityEdit"
+                    ng-click="updatePriority()">
+                    <i class="material-icons">done</i>
+                  </button>
+              </div>
+              <div class=" col s3">
+
+                <input class="with-gap" name="priority" type="radio" id="1"  value="1"  [disabled]="!priorityEdit" [checked]="ticket.priority_id==1" ng-model="ticket.priority" />
+                <label for="1">Baja</label>
+
+              </div>
+              <div class=" col s3">
+                 <input class="with-gap" name="priority" type="radio" id="2" value="2"  [disabled]="!priorityEdit" [checked]="ticket.priority_id==2" ng-model="ticket.priority" />
+                  <label for="2">Normal</label>
+              </div>
+              <div class=" col s2">
+                 <input class="with-gap" name="priority" type="radio" id="3" value="3"  [disabled]="!priorityEdit" [checked]="ticket.priority_id==3" ng-model="ticket.priority"/>
+                  <label for="3">Alta</label>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </article>
+
+      <article class="opts"
+        *ngIf="ticket.status.id !=5 && user.roles[0].id==3">
+        <i class="material-icons indigo-text"
+          ui-sref="ticketsprint({ id : ticket._id, ticket : ticket})"
+          title="Imprimir recibo">print</i>
+      </article>
+
+      <article class="row" *ngIf="ticket.status.id != 5 || user.roles[0].id==1 || user.roles[0].id==2">
+        <div class="col s12">
+          <div class="actions left">
+            <button ng-click="reassign()"
+              class="waves-effect waves-light btn small">
+              <i class="material-icons left">swap_vert</i>
+              Reasignar
+            </button>
+          </div>
+          <div class="actions right">
+            <span class="title">Cambiar estado</span>
+            <button ng-click="updateStatus(2)"
+              [disabled]="ticket.status.id !=5"
+              *ngIf="(user.roles[0].id==1 || user.roles[0].id==2) && ticket.status.id != 1 && ticket.status.id != 4"
+              class="waves-effect waves-light btn small blue lighten-1" style="margin-right: 10px">
+              <i class="material-icons left">done</i>
+              Asignado
+            </button>
+
+            <button ng-click="updateStatus(4)"
+              [disabled]="user.roles[0].id != ticket.tickets_assigned_user_to[0].id"
+              *ngIf="ticket.status.id!=1 && ticket.status.id != 4"
+              class="waves-effect waves-light btn small green" style="margin-right: 10px">
+              <i class="material-icons left">done</i>
+              Solucionado
+            </button>
+
+            <button ng-click="updateStatus(5)"
+              show-if-logged="Director, Superuser"
+              *ngIf="ticket.status.id == 4"
+              class="waves-effect waves-light btn small blue-grey" style="margin-right: 10px">
+              <i class="material-icons left">done_all</i>
+              Cerrado
+            </button>
+
+            <button ng-click="updateStatus(1)"
+              ng-disabled="currentUser.role=='Auditor'
+              || currentUser._id != ticket.assignedTo._id"
+              ng-if="ticket.status != 'Solucionado' &&
+              ticket.status != 'Cerrado' &&
+              ticket.status != 'En Espera'"
+              class="waves-effect waves-light btn small brown" style="margin-right: 10px">
+              <i class="material-icons left"> hourglass_empty</i>
+              En espera
+            </button>
+
+            <button (click)="updateStatus(3)"
+              *ngIf="ticket.status.id==1 || ticket.status.id ==4"
+            [disabled]="user.roles[0].id==5 || user.roles[0].id != ticket.tickets_assigned_user_to[0].id"
+              class="waves-effect waves-light btn small blue">
+              <i class="material-icons left">donut_large</i>
+              En Proceso
+            </button>
+
+          </div>
+        </div>
+      </article>
+
+
+    </div>
+  </div>
+
+
+</section>
+<div id="modal1" class="modal dialog" materialize="modal" [materializeParams]="model1Params" [materializeActions]="modal">
+
+  <section class="modal-body tinyScroll">
+
+    <article class="user-info" *ngIf="type_user=='assigned'">
+      <section class="modal-header">
+           {{ ticket.tickets_assigned_user_to[0].name | lowercase}}
+      </section>
+      <!--AVATAR-->
+      <div class="row">
+        <div class="col s12 avatar-container">
+          <img src="https://u.o0bc.com/avatars/no-user-image.gif?dim=150" alt="" class="circle avatar">
+          <p class="mark">
+            <i class="material-icons">access_time</i>
+            <span title="{{ ticket.tickets_assigned_user_to[0].created_at | date:'hh:mm a' }} ">
+              {{ ticket.tickets_assigned_user_to[0].created_at | date:'d MMMM, yyyy' }}
+            </span>
+          </p>
+        </div>
+      </div>
+      <!--ROL-->
+      <div class="row">
+        <div class="col s12 m3">
+          <label for="">Rol: </label>
+        </div>
+        <div class="col s12 m9">
+          {{ ticket.tickets_assigned_user_to[0].roles[0].display_name }}
+        </div>
+      </div>
+      <!--AREA-->
+      <div class="row">
+        <div class="col s12 m3">
+          <label for="">Area</label>
+        </div>
+        <div class="col s12 m9">
+          {{ ticket.tickets_assigned_user_to[0].area.name }}
+        </div>
+      </div>
+      <!--Email-->
+      <div class="row">
+        <div class="col s12 m3">
+          <label for="">Email</label>
+        </div>
+        <div class="col s12 m9">
+          {{  ticket.tickets_assigned_user_to[0].email }}
+        </div>
+      </div>
+    </article>
+
+    <!-- -PERSON -->
+          <article class="person-info" *ngIf="type_user=='person'">
+            <section class="modal-header">
+                 {{ ticket.person.name | lowercase}}
+            </section>
+            <!--DNI-->
+            <div class="row">
+              <div class="col s12 m4">
+                <label for="">Documento:</label>
+              </div>
+              <div class="col s12 m6 offset-m1">
+                {{ ticket.person.dinType_id }}: {{ ticket.person.dni}}
+              </div>
+            </div>
+            <!--EMAIL-->
+            <div class="row">
+              <div class="col s12 m4">
+                <label for="">Email:</label>
+              </div>
+              <div class="col s12 m6 offset-m1 truncate" title="{{ ticket.person.email }}">
+                {{ ticket.person.email }}
+              </div>
+            </div>
+            <!--PHONE-->
+            <div class="row">
+              <div class="col s12 m4">
+                <label for="">Telefono:</label>
+              </div>
+              <div class="col s12 m6 offset-m1">
+                {{ ticket.person.phone }}
+              </div>
+            </div>
+            <!--AGENT-->
+            <div class="row" *ngIf="ticket.person.dinType_id==2">
+              <div class="col s12 m4" >
+                <label for="">Representante Legal:</label>
+              </div>
+              <div class="col s12 m6 offset-m1">
+                <span >{{ ticket.person.agentName }}</span>
+                <br>
+                <span >C.C {{ ticket.person.agentDni }}</span>
+              </div>
+            </div>
+            <!--ADDRESS-->
+            <div class="row">
+              <div class="col s12 m4">
+                <label for="">Dirección:</label>
+              </div>
+              <div class="col s12 m6 offset-m1 truncate" title="{{ ticket.person.address }}">
+                {{ ticket.person.address }}
+              </div>
+            </div>
+            <!--DATE JOIN-->
+            <div class="row">
+              <div class="col s12 m4">
+                <label for="">Registrado:</label>
+              </div>
+              <div class="col s12 m6 offset-m1">
+                {{ ticket.person.created_at | date:'d MMMM, yyyy' }}
+              </div>
+            </div>
+
+          </article>
+
+
+  </section>
+  <div class="modal-footer">
+<button class="btn-flat right"  (click)="closeModal()">Cerrar</button>
+  </div>
+</div>
+
+
+<div id="modal2" class="modal viewercontent" materialize="modal" [materializeParams]="model1Params" [materializeActions]="modalviewer">
+  <section class="viewer-backdrop">
+    <div class="viewer-content z-depth-2">
+      <div class="viewer-head z-depth-1">
+          <div class="options" >
+          <a href="{{url}}" target="_blank" class="btn-flat">
+            <i class="material-icons left">file_download</i>
+            <span> Descargar Archivo </span>
+          </a>
+          <a href="{{url}}" target="_blank" class="btn-flat" ng-if="$ctrl.type == 'GOOGLE'">
+            <i class="material-icons left">input</i>
+            <span>Abrir por fuera</span>
+          </a>
+        </div>
+        <button   class="close" title="Cerrar" (click)="closeModal_viewer()">
+          <i class="material-icons">highlight_off</i>
+        </button>
+      </div>
+      <div class="viewer-body">
+        <!-- GOOGLE VIEW -->
+
+<iframe [src]="url | domseguro" frameborder="0" *ngIf="type_fie=='txt'"></iframe>
+ <!-- VIDEO -->
+<div class="video-cont" *ngIf="type_fie=='mp4'">
+          <video [src]="url" controls  class="z-depth-1">
+            <source [src]="url" type="video/mp4">
+            </video>
+        </div>
+
+  <div class="image-cont" *ngIf="type_fie=='jpg'">
+        <img fallback-src="https://dl.dropboxusercontent.com/u/61030097/Imagen-no-disponible.png" [src]="url" alt="" class="z-depth-1">
+  </div>
+
+
+
+      </div>
+    </div>
+  </section>
+</div>

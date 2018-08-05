@@ -1,0 +1,451 @@
+<app-navbar></app-navbar>
+<div class="app">
+
+<div class="subnav active z-depth-1" *ngIf="user.roles[0].id==2">
+  <div class="container">
+    <ul class="tabs-subnav">
+      <li class="tab" [ngClass]="{'active':tab==1}">
+        <a class="waves-effect waves-light"
+          (click)="changeTab(1)" >Mis tickets</a>
+      </li>
+      <li class="tab" [ngClass]="{'active':tab==2}">
+        <a class="waves-effect waves-light"
+          (click)="changeTab(2)">Todos</a>
+      </li>
+      <!--Papa caliente-->
+      <li class="tab"
+      [ngClass]="{'active':tab==3}">
+        <a class="waves-effect waves-light"
+          (click)="changeTab(3)">
+          <i class="material-icons" style="margin-top: 13px;">whatshot</i>
+        </a>
+      </li>
+    </ul>
+  </div>
+<div class="container">
+<div class="row">
+<!--MY TICKETS-->
+<div class="tab1" *ngIf="tab==1">
+  <div class="title">Tickets asignados (activos) </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-content">
+          <!-- -FILTERS -->
+  <div class="row nomargin flex-center">
+    <div class="filters row">
+
+        <!--Filter Assigned By Role-->
+        <div class="filter col s12 m6 l3">
+          <div class="input-field">
+            <select materialize="material_select" [(ngModel)]="myTicketsByFilters.roles_id"(change)="myTicketsByFilter()">
+              <option value="">Todos</option>
+              <option value=3>Dirección</option>
+              <option value=4>Lider de Area</option>
+              <option value=6>Agente</option>
+            </select>
+            <label>Asignado Por <small>(rol)</small></label>
+          </div>
+        </div>
+
+        <!--Filter Assigned By Name-->
+        <div class="filter col s12 m6 l5">
+          <div class="input-field">
+            <p-autoComplete [(ngModel)]="userform"  [suggestions]="filteredUser" (completeMethod)="filters($event)" [size]="30"
+                [minLength]="1" placeholder="Todos" field="name" (onSelect)="myTicketsByFilter_assigned()" >
+                <ng-template let-userform pTemplate="item">
+                    <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5">
+
+                        <img src="https://api-helpdesk-thekrash22.c9users.io/api/public/resources/no-user-image.gif" style="float:left;width: 26px;display:inline-block;margin: 5px 0 2px 5px;position: absolute; border-radius:50%"/>
+                        <div style="float:left;font-size:18px;margin:10px 10px 0 36px">{{userform.name}}</div>
+                    </div>
+                </ng-template>
+            </p-autoComplete>
+              <button class="btn-flat btn-right red-text report-close"
+              *ngIf="userselected"
+              title="Limpiar Campos"
+              (click)="clean()"              >
+             <i class="material-icons">clear</i>
+            </button>
+            <label class="active" for="user">Asignado por <small>(nombre)</small></label>
+          </div>
+        </div>
+
+      <!--Filter months-->
+      <div class="filter col s12 m6 l2">
+        <div class="input-field">
+          <select materialize="material_select" [(ngModel)]="myTicketsByFilters.month" (change)="myTicketsByFilter()">
+            <option value="">Todos</option>
+            <option value="01">Enero</option>
+            <option value="02">Febrero</option>
+            <option value="03">Marzo</option>
+            <option value="04">Abril</option>
+            <option value="05">Mayo</option>
+            <option value="06">Junio</option>
+            <option value="07">Julio</option>
+            <option value="08">Agosto</option>
+            <option value="09">Septiembre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Dicciembre</option>
+          </select>
+          <label>Mes <small>(Año presente)</small></label>
+        </div>
+      </div>
+
+    <!--Ordenar por -->
+    <div class="filter col s12 m6 l2">
+      <div class="input-field">
+        <select materialize="material_select" >
+          <option value="createdAt|-1"> Fecha creacion</option>
+          <option value="createdAt|1"> Fecha creacion</option>
+          <option value="updatedAt|-1"> Fecha actualizacion</option>
+          <option value="updatedAt|1"> Fecha actualizacion</option>
+          <option value="assignedTo.createdAt|-1">Fecha asignacion</option>
+          <option value="assignedTo.createdAt|1">Fecha asignacion</option>
+        </select>
+        <label>Ordenar Por:</label>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- -END FILTERS  -->
+</div>
+</div>
+</div> <!-- end card -->
+</div>
+</div>
+  <!--ALL TICKETS -->
+<div class="tab2" *ngIf="tab==2">
+  <div class="title">Filtros</div>
+  <!-- -FILTERS-->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-content">
+          <!-- -FILTERS-->
+          <div class="row nomargin flex-center">
+            <div class="filters row">
+              <div class="filter col s12 m3 l3">
+                <div class="input-field">
+                  <select materialize="material_select" [(ngModel)]="ticketByFilters.status_id" (change)="TicketsByFilter()">
+                    <option value="">Todos</option>
+                    <option value="1">Abiertos</option>
+                    <option value="2">Asignados</option>
+                    <option value="3">En proceso</option>
+                    <option value="4">En Espera</option>
+                    <option value="5">Solucionado</option>
+                    <option value="5">Cerrados</option>
+                  </select>
+                  <label>Estado</label>
+                </div>
+              </div>
+              <div class="filter col s12 m3 l3">
+                <div class="input-field">
+                  <select materialize="material_select" [(ngModel)]="ticketByFilters.subjects" (change)="TicketsByFilter()" >
+                    <option value="">Todos</option>
+                    <option  *ngFor="let subject of subjects" [value]="subject.id">
+                      {{subject.name}}
+                  </option>
+                  </select>
+                  <label>Asunto</label>
+                </div>
+              </div>
+              <!--Asignado Actualmente -->
+              <div class="filter col s12 m3 l3">
+                <div class="input-field">
+                  <p-autoComplete [(ngModel)]="userassigned"  [suggestions]="filteredUser" (completeMethod)="filters($event)" [size]="30"
+                      [minLength]="1" placeholder="Todos" field="name" (onSelect)="myTicketsByFilter_assigned()" >
+                      <ng-template let-userassigned pTemplate="item">
+                          <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5">
+                              
+                              <img src="https://api-helpdesk-thekrash22.c9users.io/api/public/resources/no-user-image.gif" style="float:left;width: 26px;display:inline-block;margin: 5px 0 2px 5px;position: absolute; border-radius:50%"/>
+                              <div style="float:left;font-size:18px;margin:10px 10px 0 36px">{{useract.name}}</div>
+                          </div>
+                      </ng-template>
+                  </p-autoComplete>
+                    <button class="btn-flat btn-right red-text report-close"
+                    *ngIf="useract"
+                    title="Limpiar Campos"
+                    (click)="clean()">
+                   <i class="material-icons">clear</i>
+                  </button>
+                  <label class="active" for="user">Asignado Actualmente</label>
+                </div>
+              </div>
+              <!--Fecha de Asignacion -->
+              <div class="filter col s12 m3 l3">
+                <div class="input-field">
+                  <input type="text" placeholder="Ninguna" [(ngModel)]="ticketByFilters.created_at"  (ngModelChange)="TicketsByFilter()" name="datepicker" materialize="pickadate" [materializeParams]="dateOptions"/>
+                  <label class="active">Fecha Asignacion</label>
+                </div>
+              </div>
+
+              <!--Usuario Involucrado -->
+              <div class="filter col s12 m4 l3">
+                <div class="input-field">
+                  <p-autoComplete [(ngModel)]="userinvol"  [suggestions]="filteredUser" (completeMethod)="filters($event)" [size]="30"
+                      [minLength]="1" placeholder="Todos" field="name" (onSelect)="TicketsByFilter_involved()" >
+                      <ng-template let-userinvol pTemplate="item">
+                          <div class="ui-helper-clearfix" style="border-bottom:1px solid #D5D5D5">
+                            <img src="https://api-helpdesk-thekrash22.c9users.io/api/public/resources/no-user-image.gif" style="float:left;width: 26px;display:inline-block;margin: 5px 0 2px 5px;position: absolute; border-radius:50%"/>
+                            <div style="float:left;font-size:18px;margin:10px 10px 0 36px">{{userinvol.name}}</div>
+
+                          </div>
+                      </ng-template>
+                  </p-autoComplete>
+                    <button class="btn-flat btn-right red-text report-close"
+                    *ngIf="userinvol"
+                    title="Limpiar Campos"
+                    (click)="clean()">
+                   <i class="material-icons">clear</i>
+                  </button>
+                  <label class="active" for="user">Usuario Involucrado</label>
+                </div>
+              </div>
+
+              <!--Fecha Inicio -->
+              <div class="filter col s12 m4 l3">
+                <div class="input-field">
+                    <input type="text"placeholder="Ninguna" [(ngModel)]="ticketByFilters.dateIni" name="datepicker" materialize="pickadate" (ngModelChange)="TicketsByFilter()" [materializeParams]="dateOptions"/>
+                  <label class="active">Fecha Inicio</label>
+                </div>
+              </div>
+
+              <!-- Fecha Fin-->
+              <div class="filter col s12 m4 l3">
+                <div class="input-field">
+                  <input type="text" placeholder="Ninguna" [(ngModel)]="ticketByFilters.dateEnd" name="datepicker" materialize="pickadate" (ngModelChange)="TicketsByFilter()" [materializeParams]="dateOptions"/>
+                <label class="active">Fecha Fin</label>
+                </div>
+              </div>
+
+              <!--Ordenar por-->
+              <div class="filter col s12 m4 l3">
+                <div class="input-field">
+                  <select materialize="material_select" >
+                    <option value="createdAt|-1">⇧Fecha creacion</option>
+                    <option value="createdAt|1"><span>⇩</span> Fecha creacion</option>
+                    <option value="updatedAt|-1"><span>⇧</span> Fecha actualizacion</option>
+                    <option value="updatedAt|1"><span>⇩</span> Fecha actualizacion</option>
+                    <option value="assignedTo.createdAt|-1"><span>⇧</span> Fecha asignacion</option>
+                    <option value="assignedTo.createdAt|1"><span>⇩</span> Fecha asignacion</option>
+                  </select>
+                  <label>Ordenar Por:</label>
+                </div>
+              </div>
+
+  <!-- -reset filter-->
+              <button class="btn-floating btn waves-effect waves-light red"
+                [disabled]="!ticketByFilters.status &&
+                             !ticketByFilters.subject &&
+                             !ticketByFilters.dateIni &&
+                             !ticketByFilters.dateEnd &&
+                             !ticketByFilters.userinvol &&
+                             !ticketByFilters.subjects"
+                (click)="cleanFilters()">
+                <i class="material-icons">cached</i>
+              </button>
+
+
+
+            </div>
+          </div>
+          <!-- -END FILTERS-->
+        </div>
+      </div> <!-- end card-->
+
+    </div>
+
+
+  <div class="title">Todos mis tickets</div>
+
+</div>
+</div>
+
+<div class="row" >
+<div class="col-md-12">
+  <ul class="pagination">
+         <li *ngIf="tickets.current_page==1;else current_pages"class="disabled"><a ><i class="material-icons">chevron_left</i></a></li>
+         <ng-template #current_pages> <li class="waves-effect"><a (click)="pagination(1, tab)"><i class="material-icons">chevron_left</i></a></li></ng-template>
+        <ng-template ngFor let-item [ngForOf]="createRange(tickets.last_page)" let-currentElementIndex="index+1">
+        <li class="waves-effect" [ngClass]="{'active':tickets.current_page==currentElementIndex}"><a (click)="pagination(currentElementIndex, tab)">{{currentElementIndex}}</a></li>
+        </ng-template>
+        <li class="waves-effect"><a (click)="pagination(tickets.last_page, tab)"><i class="material-icons">chevron_right</i></a></li>
+      </ul>
+   <div class="card">
+     <div class="card-content">
+       <div class="tools">
+         <div class="search-table">
+           <input type="search" required placeholder="Buscar"
+           ng-change="updateFilters(true)">
+           <label ><i class="material-icons">search</i></label>
+           <i class="material-icons close hand" *ngIf="search">
+             close
+           </i>
+         </div>
+       </div>
+       
+       <table class="highlight responsive-table">
+         <thead>
+           <tr>
+             <th data-field="#">#</th>
+             <th data-field="Radicado">Radicado</th>
+             <th data-field="asunto">Asunto</th>
+             <th data-field="solicitante">Solicitante</th>
+             <th data-field="Asingado" ng-if="$ctrl.tab != 1">Asignado</th>
+             <th data-field="Desde" ng-if="$ctrl.tab == 1">Desde</th>
+             <th data-field="fecha">Fecha</th>
+             <th data-field="estado">Estado</th>
+             <th data-field="vencimiento" class="center"
+               ng-if="tab == 1">Vencimiento</th>
+             <th data-field="action" class="center">Acciones</th>
+           </tr>
+         </thead>
+            <tbody style="font-size: 14px;">
+              <tr *ngFor="let t of tickets.data;let i = index">
+              <td>
+             <strong>{{i+1}}</strong>
+           </td>
+           <!--Radicado-->
+          <td>
+            <span>{{t.settled}}</span>
+          </td>
+          <!--Asuntos-->
+         <td style="max-width:208px">
+           <div class="chip_n"  *ngFor="let s of t.subjects ">
+             {{s.name}}
+           </div>
+         </td>
+         <!--Solicitante-->
+       <td class="capitalize applicant-name"
+         title="{{t.person.name }}">
+         {{t.person.name | lowercase  }}
+       </td>
+       <!--Asignado-->
+     <td  >
+       <div style="display: flex;">
+       <!--  <img src="{{ t.assignedTo.avatar }}?dim=100"
+           alt="{{ t.assignedTo.name }}"
+           class="avatar circle"
+           width="30px" height="30px"
+           style="margin-right:3px;object-fit: cover;">-->
+
+       <span *ngIf="!t.tickets_assigned_user_to[0]">
+         Sin asignar
+       </span>
+         <span style="margin:auto 0;width: 100px;"
+         *ngIf="t.tickets_assigned_user_to[0]"
+           class="truncate" title="">
+           {{ t.tickets_assigned_user_to[0].name }}
+         </span>
+
+
+       </div>
+     </td>
+     <!--Desde-->
+       <td ng-if="tab == 1">
+         <span *ngIf="t.tickets_assigned_user_by[0] " style="display: flex;">
+         <!--  <img src="{{ t.fromAssignamentUser.avatar }}?dim=100"
+             alt="{{ t.fromAssignamentUser.name }}"
+             class="avatar circle"
+             width="30px" height="30px"
+             style="margin-right:3px;object-fit: cover;">-->
+           <span style="margin:auto 0;width: 100px;"
+           *ngIf="t.tickets_assigned_user_by[0]"
+             class="truncate" >
+             {{ t.tickets_assigned_user_by[0].name }}
+           </span>
+         </span>
+
+         <span *ngIf="!t.tickets_assigned_user_by[0]">
+           Sin asignar
+         </span>
+       </td>
+       <!--Fecha-->
+         <td>
+           <span >{{t.created_at   | date:'dd/MM/yy'}}</span>
+       </td>
+       <!--Status-->
+            <td>
+              <span class="status {{t.status.name| lowercase}}">
+              </span>
+            </td>
+            <!--Vencimiento-->
+          <td class="center">
+            <span ng-if="t.current"
+              ng-init="t.msg = t.current.finishDate?'Finalizado':''"
+              title="{{ t.msg }}">
+              <span class="date-text-high">
+            10/10 Dias
+
+            <img src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjI0cHgiIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDE2Ni42NzQgMTY2LjY3NCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMTY2LjY3NCAxNjYuNjc0OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxnPgoJPGc+CgkJPHBhdGggZD0iTTE2MC44OTMsMTM1LjIyOWMtMy43MzItMi4zNjItMTAuNzU5LTIuMjY1LTE2LjU0NC0xLjY1NmwtMTMuOTM4LTEzLjk0NGMxLjQyNS0xLjE4MiwyLjUxNi0yLjc2NCwyLjk3OC00LjkwMSAgICBjMCwwLDIuOTktNi44OTktNC40NjktMTUuNzA0YzAsMC0xLjk5MS04LjUzNywwLjQ1LTE3LjU5OGMyLjE4LTguMDIsMi44MjUtMjAuNTQyLTEuMTQ1LTMyLjIzM2wxNi4xMjQtMTYuMTE4ICAgIGM1Ljc5MSwwLjYxMSwxMi44MjQsMC43MTgsMTYuNTU3LTEuNjZjMC45NDktMC40ODcsMS44NTEtMS4xMjEsMi42NzMtMS45MzNjMi44MDgtMi44MTEsMy43MDItNi44MTQsMi42NzMtMTAuMzk1ICAgIGMtMC40ODYtMS42NDQtMS4zNy0zLjIwOS0yLjY3My00LjUxOGMtMi4zMTMtMi4zMTQtNS40MTMtMy4zMjUtOC40NDUtMy4wMzljMC4yOC0zLjAyMy0wLjc0My02LjEzNS0zLjA0NS04LjQ0MiAgICBjLTEuMzE1LTEuMzEtMi44NzQtMi4xOTUtNC41My0yLjY3M2MtMy41NjgtMS4wMjktNy41ODEtMC4xNDYtMTAuMzg4LDIuNjczYy0wLjgxMSwwLjgwNC0xLjQzOCwxLjcwMi0xLjk0MiwyLjY3NiAgICBjLTIuMzYzLDMuNzMtMi4yNjYsMTAuNzU3LTEuNjU2LDE2LjU1NGwtMTMuMDM3LDEzLjAxOWMtMi40MzYtMi45MjMtNS4zNDEtNS41OS04Ljg3Mi03Ljg3MyAgICBjLTYuNzI5LTQuMzMtMTQuNDMyLTguMDMyLTMwLjk0NS04LjMwNkM3MC4yMDQsMTguOTksNTUuMDIxLDIwLjk5LDQzLjY0NiwzMi44ODJMMzMuMDkxLDIyLjMxNyAgICBjMC42MDUtNS43OTcsMC43MDYtMTIuODMtMS42NzgtMTYuNTZjLTAuNDc4LTAuOTYyLTEuMTE0LTEuODY2LTEuOTM0LTIuNjY0Yy0yLjgwNC0yLjgxNi02LjgxOS0zLjcwMi0xMC4zODgtMi42NzMgICAgYy0xLjY1NiwwLjQ3OC0zLjIxNSwxLjM2NC00LjUzLDIuNjczYy0yLjMwMiwyLjMwOC0zLjMxMiw1LjQxMy0zLjAzMyw4LjQyNWMtMy4wMTEtMC4yNzQtNi4xMjgsMC43NDMtOC40NDIsMy4wNSAgICBjLTEuMjk3LDEuMzE1LTIuMjAxLDIuODc1LTIuNjY3LDQuNTM0Yy0xLjAyOSwzLjU3MS0wLjEzNyw3LjU2OCwyLjY2NywxMC4zOTRjMC44MSwwLjc5NywxLjcwOCwxLjQ0LDIuNjg4LDEuOTI0ICAgIGMzLjczLDIuMzc4LDEwLjc2MywyLjI3NywxNi41MzUsMS42NTlsMTIuNzA4LDEyLjcwOGMtMS4xMTcsMi4zOTktMi4xNjUsNC45MzgtMy4wMjMsNy43N2MwLDAtNC42MDQsMTUuNjEzLDIuNDM2LDM3LjI2MyAgICBjMCwwLDAuNjcsNi4zMjctMy42MDIsMTAuODJjLTMuNDM4LDMuNjE3LTYuNzc3LDE1LjEyNiwzLjg3OCwxOS41NDZsLTEyLjM4NSwxMi4zODZjLTUuNzg1LTAuNjE1LTEyLjgxNy0wLjcxOS0xNi41NDEsMS42NjkgICAgYy0wLjk1MywwLjQ3NS0xLjg2MywxLjExMy0yLjY3NiwxLjkyNGMtMi44MDQsMi44MTItMy43MDIsNi44MzItMi42NzMsMTAuMzk1YzAuNDg0LDEuNjQ5LDEuMzcsMy4yMjEsMi42NzMsNC41MzYgICAgYzIuMzA4LDIuMzAyLDUuNDEzLDMuMzEyLDguNDM3LDMuMDMyYy0wLjI4LDMuMDIxLDAuNzQzLDYuMTMyLDMuMDQ1LDguNDQ1YzEuMzE1LDEuMjk3LDIuODc0LDIuMTg3LDQuNTM5LDIuNjYxICAgIGMzLjU1OSwxLjAzNSw3LjU2OSwwLjEzNCwxMC4zODgtMi42NjFjMC44MDQtMC44MDQsMS40NC0xLjcxNywxLjkyNC0yLjY4NmMyLjM4NC0zLjczMiwyLjI3MS0xMC43NTksMS42NjUtMTYuNTM3bDE5LjIwNi0xOS4yMTIgICAgYzEuMzE1LDIuMzgxLDIuODI1LDcuMTQzLDMuNjI5LDE2Ljc2NGMwLDAsMC41MjQsNi44NjgsNi40OTEsNS43ODRjMCwwLDMuMDYzLTAuMTgyLDMuNjA1LTEzLjE3N2MwLDAsMy40MzQtMy4yNTEsMy4yNDgsNC41MDcgICAgYzAsMC0wLjkxLDkuMDI5LDQuODY5LDguNDg4YzAsMCwzLjI0MywxLjk4NCw0LjUwOS03Ljk0MWMwLDAsMC04LjY2NCwzLjA3NS01LjQxOWMwLDAsMC44OTgsMTIuNjM2LDQuNTEyLDEzLjkwMSAgICBjMCwwLDUuMjMsMS42MjYsNi4xMzgtNS4yMzZjMCwwLTAuMDEyLTExLjAwMywyLjg4LTkuMDE4YzAsMCwxLjA4NCwwLjcyNSwxLjI1NSw3LjM5MmMwLDAtMC4xNzEsNy4wNDYsNC4zMzUsNi42ODcgICAgYzAsMCw0LjY4OCwwLDUuOTU1LTEwLjgyYzAsMC0wLjc5MS0xMi4xMzcsNS4yOTgtMTQuMTY0bDIxLjQ3MSwyMS40NzdjLTAuNjE1LDUuNzg1LTAuNzA3LDEyLjgyNCwxLjY3NCwxNi41NTEgICAgYzAuNDcsMC45NjIsMS4xMjEsMS44NzUsMS45MzEsMi42NzNjMi44MTMsMi44MTksNi44MjYsMy43MDIsMTAuMzg4LDIuNjczYzEuNjUtMC40NzUsMy4yMjItMS4zNjMsNC41MjQtMi42NzMgICAgYzIuMzE0LTIuMzA4LDMuMzI1LTUuNDEzLDMuMDQ1LTguNDQ2YzMuMDE0LDAuMjgsNi4xMjYtMC43NDIsOC40NDUtMy4wNDRjMS4zMDQtMS4zMTUsMi4xODctMi44NzQsMi42NzQtNC41MTkgICAgYzEuMDIyLTMuNTgsMC4xMzQtNy41ODEtMi42NzQtMTAuNEMxNjIuNzU2LDEzNi4zNDksMTYxLjg2NywxMzUuNzE2LDE2MC44OTMsMTM1LjIyOXogTTU0Ljk3MiwxMDguNjkyICAgIGMtMi4wNTItMC40MDgtMy45MjUtMS4xNzYtNS41OTMtMi4xNjJjLTUuMzg5LTMuMTcyLTguNTA2LTguODU5LTcuMzU4LTE0LjU3MWMxLjUyOC03LjQ2Niw5Ljc4Mi0xMi4wODQsMTguNDYyLTEwLjMyNyAgICBjMy42MjMsMC43NDMsNi42NzcsMi41MDksOC45NjcsNC44MTFjMy4yMTgsMy4yMzksNC44NSw3LjU2MiwzLjk3OSwxMS45MTZDNzEuOTA2LDEwNS44NDMsNjMuNjQ5LDExMC40Nyw1NC45NzIsMTA4LjY5MnogICAgIE04Ni4wODUsMTE4LjY0MmMtMC42MzcsMC40NTEtMS4zNCwwLjcxOS0yLjA4MywwLjcxOWMtMS4zNCwwLTIuNTMtMC44MTYtMy4zMjEtMi4wOTVjLTAuNzk1LDEuMjc4LTEuOTc5LDIuMDk1LTMuMzE5LDIuMDk1ICAgIGMtMC43NDksMC0xLjQ2NC0wLjI2OC0yLjA4My0wLjcxOWMtMS4zMzMtMC45OTItMi4yMzEtMi44OC0yLjIzMS01LjA2NmMwLTAuNjIxLDAuMDg1LTEuMjExLDAuMjE2LTEuNzc3ICAgIGMwLjc0My00LjQ3LDcuNDE3LTEwLjA5Niw3LjQxNy0xMC4wOTZzNi42NjcsNS42MjYsNy40MSwxMC4wOTZjMC4xNDEsMC41NiwwLjIxMywxLjE2MiwwLjIxMywxLjc3NyAgICBDODguMzE2LDExNS43NjIsODcuMzk2LDExNy42NDksODYuMDg1LDExOC42NDJ6IE0xMTQuODI4LDEwNC4wNTJjLTIuMjc3LDIuMjI5LTUuMjkxLDMuOTI4LTguODIzLDQuNjQxICAgIGMtMi45MTYsMC42MDMtNS43NiwwLjQxNC04LjM0Mi0wLjI5M2MtNS4wOTctMS40MjUtOS4xMDQtNS4wNjYtMTAuMTItMTAuMDI4bC0wLjAwNi0wLjEwNGMtMS4wOS01LjU5LDEuOTEyLTExLjE4LDcuMTQzLTE0LjM2NCAgICBjMS43MTEtMS4wNDEsMy42ODQtMS44MjcsNS44MjEtMi4yNmM4LjY3Ny0xLjc2OSwxNi45MjgsMi44NSwxOC40NSwxMC4zMjFDMTE5Ljg1Miw5Ni40MDQsMTE4LjE0NywxMDAuODAxLDExNC44MjgsMTA0LjA1MnoiIGZpbGw9IiNmNDQzMzYiLz4KCTwvZz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K" />
+              </span>
+              <div class="progress date-progress-high"
+                ng-if="t.current"
+                style="width: 100px;margin: 0 auto;">
+                <div class="determinate" >
+                </div>
+              </div>
+            </span>
+            <span *ngIf="t.current">
+              Sin asignar
+            </span>
+          </td>
+    <!--Acciones-->
+     <td class="center">
+       <a *ngIf="user.roles[0].id==1"
+         ui-sref="ticketsnew({ relatedTicket: t})"
+         style="margin-right: 10px;"
+         title="Renovar"
+         ng-if="t.status == 'En Espera'">
+         <i class="material-icons brown-text">blur_circular</i>
+       </a>
+
+       <a ui-sref="ticketsprint({ id : t._id, ticket : t})"
+         style="margin-right: 10px;"
+         title="Imprimir"
+         *ngIf="t.status == 'En Espera'">
+         <i class="material-icons indigo-text">print</i>
+       </a>
+         <a title="Visualizar"
+           style="margin-right: 7px; cursor: pointer;">
+           <i class="material-icons purple-text">remove_red_eye</i>
+         </a>
+       <a [routerLink]="['/ticket-detail',t.id]">
+         <i class="material-icons">input</i>
+       </a>
+     </td>
+         </tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+<ul class="pagination">
+   <li *ngIf="tickets.current_page==1;else current_pages"class="disabled"><a ><i class="material-icons">chevron_left</i></a></li>
+   <ng-template #current_pages> <li class="waves-effect"><a (click)="pagination(1, tab)"><i class="material-icons">chevron_left</i></a></li></ng-template>
+  <ng-template ngFor let-item [ngForOf]="createRange(tickets.last_page)" let-currentElementIndex="index+1">
+  <li class="waves-effect" [ngClass]="{'active':tickets.current_page==currentElementIndex}"><a (click)="pagination(currentElementIndex, tab)">{{currentElementIndex}}</a></li>
+  </ng-template>
+  <li class="waves-effect"><a (click)="pagination(tickets.last_page, tab)"><i class="material-icons">chevron_right</i></a></li>
+</ul>
+</div>
+
+  <div class="empty center" style="margin-top: 100px"
+  *ngIf="!tickets.data">
+  <i class="material-icons" style=" display: block;font-size: 80px;">toc</i>
+  No se encontró resultados.
+</div>
+
+<a class="btn-floating btn-large waves-effect waves-light btn-new"
+  *ngIf="user.roles[0].id==2 || user.roles[0].id==1 || user.roles[0].id==3"
+  title="Agregar"
+  [routerLink]="['/ticket-new']">
+  <i class="material-icons">add</i>
+</a>
+       </div>
+     </div>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<p-autoComplete [(ngModel)]="value" [suggestions]="filteredsubjects" (completeMethod)="filterSubject($event)" [multiple]="true">
+
+</p-autoComplete>
+<p-autoComplete [(ngModel)]="countries" [suggestions]="filteredsubjects" (completeMethod)="filterSubject($event)"
+      [minLength]="1" placeholder="Countries" field="name" [multiple]="true">
+      <ng-template let-value pTemplate="selectedItem">
+          <span style="font-size:18px">{{value.name}}</span>
+          <button class="btn-flat btn-right red-text"
+           title="Limpiar Campos"
+           ng-click="$ctrl.clearAssign()">
+            <i class="material-icons">clear</i>
+          </button>
+      </ng-template>
+  </p-autoComplete>
+
+  <h3 class="first">Advanced</h3>
+<p-fileUpload name="demo[]" url="./upload.php" (onSelect)="myUploader($event)"
+        multiple="multiple"  maxFileSize="1000000" styleClass="pureba" [showUploadButton]="false">
+    <ng-template pTemplate="content">
+        <ul *ngIf="uploadedFiles.length">
+            <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+        </ul>
+    </ng-template>
+</p-fileUpload>

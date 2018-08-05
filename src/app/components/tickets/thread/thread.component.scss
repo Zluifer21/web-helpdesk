@@ -1,0 +1,301 @@
+$primaryColor:  #388E3C;
+$secondColor:   #8BC34A;
+$thirdColor:    #DCE775;
+$fourthColor:   #FFF59D;
+
+$accentColor:    #1de9b6;
+$bgColor:        #efefef;
+$darkBgColor:    #263238;
+$lightBgColor:   #37474f;
+
+$lightTextColor: #c3c3c3;
+$darkTextColor:  #212121;
+
+//dates colors
+$low: #f44336;
+$mid: #ffc107;
+$high: #4caf;
+
+thread {
+  .box-reply{
+    .card-content {
+      padding: 5px 15px;
+    }
+    .card-action {
+      padding: 10px 20px;
+      .btn-flat {
+        color: #343434 !important;
+      }
+    }
+
+    .form-reply {
+      position: relative;
+
+      /* *input and Avatar */
+      .form-input {
+        .avatar {
+          width: 40px;
+          height: 40px;
+          object-fit: cover;
+          position: absolute;
+          top: 8px;
+          left: 5px;
+        }
+        .input-note {
+          padding: 15px 20px 12px 55px;
+          box-sizing: border-box;
+          margin: 0;
+          resize: none;
+          border: none;
+          height: 51px;
+          transition: all 200ms ease-in-out;
+          &:focus {
+            border-bottom-color: #26a69a;
+            box-shadow: 0 1px 0 0 #26a69a;
+          }
+          outline: none;
+        }
+      }
+
+      /* * opciones */
+      .form-options {
+        padding: 10px;
+        color: #404040;
+        .btn {
+          padding: 0 10px;
+          margin-right: 10px;
+          &.attach-file { background-color: #03a9f4 }
+          &.attach-form { background-color: #3f51b5 }
+        }
+        .show-f{
+          display: inline;
+          a { border-bottom: 1px dotted; cursor: pointer; }
+          .btn-flat { padding: 0 10px; }
+        }
+
+      }
+      /* * content*/
+      .form-content {
+      }
+
+    }
+  }
+  .row.theads-list {
+    margin: 20px 0;
+  }
+  .thread{
+    position: relative;
+    margin-bottom: 10px;
+    &:before {
+      content: '';
+      width: 7px;
+      bottom: 0;
+      top: 80px;
+      left: 7%;
+      right: 0;
+      background-color: #e4e1e1;
+      position: absolute;
+    }
+    &:last-child {
+      &:before {
+        display: none;
+      }
+    }
+    .avatar-time{
+      //margin-top: 10px;
+    }
+    .reply-box{
+      font-size: 1rem;
+      color: #404040;
+      padding-bottom: 20px;
+      margin-top: 0;
+      position: relative;
+      div.indicator {
+        position: absolute;
+        top: -10px;
+        left: -16px;
+        height: 22px;
+        right: 0;
+        background: #4285f4;
+        img {
+          position: absolute;
+          top: -11px;
+          left: -7px;
+        }
+        span {
+          padding-left: 50px;
+          color: white;
+          font-size: 14px;
+          font-weight: bold;
+        }
+        &.lider {
+          background: #6D8E8B;
+        }
+
+      }
+      .reply-head{
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+        small.said {
+          color: #999;
+        }
+        .opts{
+          display: block;
+          margin-top:10px;
+          i{
+            color: grey;
+            font-size: 17px;
+            padding: 0 7px;
+            cursor: pointer;
+            &.disabled{
+              cursor: default;
+              filter: grayscale(100%);
+            }
+          }
+        }
+        @media only screen and (max-width: 601px){
+          small.said {
+            display: block;
+          }
+          .opts{
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 15px;
+            padding-right: 12px;
+          }
+        }
+      }
+      .reply-body {
+        pre{
+          white-space: pre-wrap;
+          overflow-x: auto;
+          line-height: 1.5;
+          font-family: "Roboto", sans-serif;
+          font-weight: normal;
+        }
+        .editing-note{
+          box-sizing: border-box;
+          margin: 0;
+          resize: none !important;
+          border: none;
+          height: 51px;
+          transition: all 200ms ease-in-out;
+          border-bottom-color: #26a69a;
+          outline: none;
+          box-shadow: 0 1px 0 0 #f44336;
+          &:focus {
+            box-shadow: 0 1px 0 0 #26a69a;
+          }
+        }
+      }
+      .reply-attach{
+        border-top: 1px solid rgba(167, 167, 167, 0.4);
+        font-size: 14px;
+        &.editing {
+          border-top: none;
+        }
+        .adjuntos {
+          display: block;
+          align-items: center;
+          margin-top: 10px;
+          strong{
+            display: block;
+          }
+          p.adjuntos i {
+            margin-left: 10px;
+            font-size: 15px;
+          }
+          a.info {
+            margin-left: 5px;
+            cursor: pointer;
+            border-bottom: 1px dotted;
+          }
+          &.attach-form{
+            display: flex;
+          }
+        }
+
+        @media only screen and (max-width : 601px){
+          .adjuntos {
+            display: table-caption;
+            min-width: 220px;
+            word-wrap: break-word;
+            word-break: break-word;
+          }
+        }
+      }
+      .editing-save{
+         button{
+          height: 33px;
+          line-height: 33px;
+          padding: 0 1.3rem;
+          font-size: 14px;
+        }
+      }
+    }
+    @media only screen and (max-width: 601px){
+      &:before {
+        left: 3%;
+        top: 60px;
+      }
+    }
+  }
+
+  .time-indicator{
+    display: flex;
+    margin-left: 10px;
+    height: inherit;
+    align-items: flex-end;
+    font-size: 11px;
+    line-height: 1;
+    color: #999;
+    margin-top: 4px;
+    i {
+      font-size: 12px;
+    }
+    span {
+      font-style: italic;
+    }
+  }
+  /*
+   *HELPS
+   */
+  .showOnFocus {
+    max-height: 0;
+    transition: max-height 0.2s ease-out;
+    overflow: hidden;
+    &.active {
+      max-height: 500px;
+      transition: max-height 0.35s ease-in;
+    }
+  }
+  .avatar{
+    position: relative;
+    .user-avatar {
+      object-fit: cover;
+      width: 50px;
+      height: 50px;
+    }
+    .user-badge{
+      position: absolute;
+      bottom: -20px;
+      right: -5px;
+      width: 20px;
+    }
+  }
+
+  ul.file_list {
+    i.attach {
+      vertical-align: middle;
+      color: #404040;
+      font-size: 15px
+    }
+    .btn-flat {
+      padding: 0 10px;
+    }
+    a {
+      font-size: 14px;
+    }
+  }
+}
